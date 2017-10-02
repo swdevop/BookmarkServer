@@ -8,6 +8,12 @@ import requests
 import os
 from urllib.parse import unquote, parse_qs
 
+import threading
+from socketserver import ThreadingMixIn
+
+class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    "This is an HTTPServer that supports thread-based concurrency."
+
 memory = {}
 
 form = '''<!DOCTYPE html>
@@ -101,5 +107,5 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     server_address = ('', int(os.environ.get('PORT', '8000')))
-    httpd = http.server.HTTPServer(server_address, Shortener)
+    httpd = ThreadHTTP.server.HTTPServer(server_address, Shortener)
     httpd.serve_forever()
